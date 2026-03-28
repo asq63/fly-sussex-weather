@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIFS'S — Weather Information for Fly Sussex Sites</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green: #1a8a3f;
+      --green-bg: #e6f5eb;
+      --amber: #c87a1a;
+      --amber-bg: #fdf2e0;
+      --red: #c0392b;
+      --red-bg: #fde8e5;
+      --surface: #ffffff;
+      --surface-alt: #f7f8fa;
+      --border: #e2e5ea;
+      --text-primary: #1a1d23;
+      --text-secondary: #5a6070;
+      --text-muted: #8891a0;
+      --accent: #1a5276;
+      --accent-light: #e8f0f7;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--surface-alt);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1a3c5e 0%, #1a5276 50%, #1f6f8b 100%);
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      position: relative;
+    }
+    .header h1 span { color: #7ec8e3; }
+    .header .subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.75;
+      margin-top: 4px;
+      position: relative;
+    }
+
+    /* Logo SVG */
+    .logo-icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    /* Info bar */
+    .info-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .info-bar .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .info-bar .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-green { background: var(--green); }
+    .dot-amber { background: var(--amber); }
+    .dot-red { background: var(--red); }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .legend-swatch {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+    }
+    .swatch-green { background: var(--green); }
+    .swatch-amber { background: var(--amber); }
+    .swatch-red { background: var(--red); }
+
+    /* Main content */
+    .main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 40px; }
+
+    /* Compass section */
+    .compass-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .compass-section h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .compass-section .compass-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .compass-container {
+      display: inline-block;
+      position: relative;
+    }
+
+    /* Today highlight */
+    .today-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .today-section h2 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .today-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+    }
+    .today-stat {
+      background: var(--surface-alt);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .today-stat .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .today-stat .value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .today-stat .unit {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* Forecast grid */
+    .forecast-section h2 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .forecast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    /* Day card */
+    .day-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow 0.15s ease;
+    }
+    .day-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .day-card-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .day-card-header .day-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .day-card-header .day-date {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .day-card-wind {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .wind-arrow-container {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+    .wind-arrow {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s ease;
+    }
+    .wind-details { flex: 1; min-width: 0; }
+    .wind-direction-label {
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .wind-speed {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .wind-gust {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Sites list in card */
+    .day-card-sites {
+      padding: 0 14px 12px;
+    }
+    .site-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-top: 1px solid #f0f1f3;
+    }
+    .site-row:first-child { border-top: none; }
+    .site-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .site-status {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .status-green {
+      background: var(--green-bg);
+      color: var(--green);
+    }
+    .status-amber {
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+    .status-red {
+      background: var(--red-bg);
+      color: var(--red);
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .loading .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error */
+    .error-msg {
+      background: var(--red-bg);
+      color: var(--red);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header h1 { font-size: 18px; }
+      .forecast-grid { grid-template-columns: 1fr; }
+      .info-bar { flex-direction: column; gap: 8px; }
+      .today-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>
+      <svg class="logo-icon" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WIFS logo">
+        <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1.5" fill="none" opacity="0.3"/>
+        <path d="M16 4 L16 28 M4 16 L28 16 M7.5 7.5 L24.5 24.5 M24.5 7.5 L7.5 24.5" stroke="white" stroke-width="0.7" opacity="0.2"/>
+        <path d="M16 6 C18 12, 22 14, 22 18 C22 22, 19.3 24, 16 24 C12.7 24, 10 22, 10 18 C10 14, 14 12, 16 6Z" fill="white" opacity="0.9"/>
+        <path d="M16 10 L17.5 15 L15 13.5 L16.5 18 L14 16 Z" fill="#1a5276" opacity="0.6"/>
+      </svg>
+      <span>WIFS'S</span> — Weather Information for Fly Sussex Sites
+    </h1>
+    <div class="subtitle">Beddingham, Lewes, East Sussex &middot; Powered by Met Office (UKMO) data via Open-Meteo</div>
+  </div>
+
+  <div class="info-bar">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-swatch swatch-green"></div> On Wind — Flyable</div>
+      <div class="legend-item"><div class="legend-swatch swatch-amber"></div> Near — Marginal</div>
+      <div class="legend-item"><div class="legend-swatch swatch-red"></div> Off Wind — Not Suitable</div>
+    </div>
+    <div class="badge" id="update-time">Loading...</div>
+  </div>
+
+  <div class="main">
+    <!-- Compass Rose -->
+    <div class="compass-section">
+      <h2>Fly Sussex Site Wind Rose</h2>
+      <p class="compass-subtitle">Sites and their flyable wind directions</p>
+      <div class="compass-container">
+        <svg id="compass-rose" width="380" height="380" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+
+    <!-- Today's conditions -->
+    <div class="today-section" id="today-section" style="display:none;">
+      <h2>Current Conditions</h2>
+      <div class="today-grid" id="today-grid"></div>
+    </div>
+
+    <!-- 14-day forecast -->
+    <div class="forecast-section">
+      <h2>16-Day Forecast <span style="font-size:11px;font-weight:500;color:var(--text-muted);">(Days 8–16 use extended models)</span></h2>
+      <div id="forecast-container">
+        <div class="loading">
+          <div class="spinner"></div>
+          Fetching Met Office forecast data...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Weather data: <a href="https://www.metoffice.gov.uk/" target="_blank" rel="noopener">Met Office UK (UKMO)</a> via
+    <a href="https://open-meteo.com/en/docs/ukmo-api" target="_blank" rel="noopener">Open-Meteo</a> &middot;
+    Data updates every 6 hours &middot; &copy; 2026 Fly Sussex
+  </div>
+
+<script>
+// ==========================================================
+// FLY SITE DEFINITIONS — from the compass rose image
+// Each site: name, start angle (deg), end angle (deg)
+// Angles are meteorological: 0°=N, 90°=E, 180°=S, 270°=W
+// ==========================================================
+const SITES = [
+  { name: "Beddingham",      start: 340, end: 50,  color: "#2271a1" },
+  { name: "Swan Borough",    start: 25,  end: 65,  color: "#2b5e8c" },
+  { name: "High & Over",     start: 45,  end: 130, color: "#2271a1" },
+  { name: "Gribbles",        start: 300, end: 350, color: "#2b5e8c" },
+  { name: "West Flank",      start: 250, end: 310, color: "#2271a1" },
+  { name: "Newhaven Cliffs", start: 170, end: 215, color: "#2b5e8c" },
+  { name: "Mt. Caburn",      start: 160, end: 200, color: "#2b5e8c" },
+  { name: "Muggery",         start: 155, end: 245, color: "#2271a1" },
+];
+
+// Beddingham, Lewes coordinates
+const LAT = 50.856;
+const LON = 0.025;
+
+// ==========================================================
+// WIND DIRECTION UTILITIES
+// ==========================================================
+function normalizeAngle(a) {
+  return ((a % 360) + 360) % 360;
+}
+
+// Get angular distance (shortest path around circle)
+function angleDist(a, b) {
+  const d = normalizeAngle(b - a);
+  return d > 180 ? 360 - d : d;
+}
+
+// Check if angle is within arc (handles wrap around 0/360)
+function isInArc(angle, start, end) {
+  angle = normalizeAngle(angle);
+  start = normalizeAngle(start);
+  end = normalizeAngle(end);
+  if (start <= end) {
+    return angle >= start && angle <= end;
+  } else {
+    // Arc wraps through north (0°)
+    return angle >= start || angle <= end;
+  }
+}
+
+// Distance from angle to nearest edge of an arc
+function distToArc(angle, start, end) {
+  if (isInArc(angle, start, end)) return 0;
+  return Math.min(angleDist(angle, start), angleDist(angle, end));
+}
+
+// Determine status for a site given wind direction in degrees
+// Green: wind is within the site's arc
+// Amber: wind is within 22.5° of the arc edge
+// Red: otherwise
+function getSiteStatus(windDeg, site) {
+  if (isInArc(windDeg, site.start, site.end)) return "green";
+  const dist = distToArc(windDeg, site.start, site.end);
+  if (dist <= 22.5) return "amber";
+  return "red";
+}
+
+// Degrees to compass label
+function degToCompass(deg) {
+  const dirs = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+  return dirs[Math.round(normalizeAngle(deg) / 22.5) % 16];
+}
+
+// m/s to mph
+function msToMph(ms) {
+  return (ms * 2.237).toFixed(1);
+}
+
+// ==========================================================
+// COMPASS ROSE SVG
+// ==========================================================
+function drawCompassRose(currentWindDeg) {
+  const svg = document.getElementById("compass-rose");
+  const cx = 190, cy = 190;
+  const outerR = 150, innerR = 105, innerR2 = 80;
+
+  // Helper: arc path
+  function arcPath(cx, cy, r1, r2, startDeg, endDeg) {
+    const s = normalizeAngle(startDeg) - 90; // SVG starts at 3 o'clock, we want 12
+    const e = normalizeAngle(endDeg) - 90;
+    const startRad1 = s * Math.PI / 180;
+    const endRad1 = e * Math.PI / 180;
+    const x1o = cx + r1 * Math.cos(startRad1);
+    const y1o = cy + r1 * Math.sin(startRad1);
+    const x2o = cx + r1 * Math.cos(endRad1);
+    const y2o = cy + r1 * Math.sin(endRad1);
+    const x1i = cx + r2 * Math.cos(endRad1);
+    const y1i = cy + r2 * Math.sin(endRad1);
+    const x2i = cx + r2 * Math.cos(startRad1);
+    const y2i = cy + r2 * Math.sin(startRad1);
+
+    let sweep = normalizeAngle(endDeg - startDeg);
+    const largeArc = sweep > 180 ? 1 : 0;
+
+    return `M ${x1o} ${y1o} A ${r1} ${r1} 0 ${largeArc} 1 ${x2o} ${y2o} L ${x1i} ${y1i} A ${r2} ${r2} 0 ${largeArc} 0 ${x2i} ${y2i} Z`;
+  }
+
+  // Helper: text along arc midpoint
+  function textAtAngle(cx, cy, r, startDeg, endDeg, label, fontSize) {
+    let midDeg;
+    const span = normalizeAngle(endDeg - startDeg);
+    midDeg = normalizeAngle(startDeg + span / 2) - 90;
+    const rad = midDeg * Math.PI / 180;
+    const x = cx + r * Math.cos(rad);
+    const y = cy + r * Math.sin(rad);
+    // Rotate text to follow the arc
+    let rot = midDeg + 90;
+    if (rot > 90 && rot < 270) rot += 180; // Keep text readable
+    const fs = fontSize || 9;
+    return `<text x="${x}" y="${y}" transform="rotate(${rot},${x},${y})" text-anchor="middle" dominant-baseline="central" fill="white" font-size="${fs}" font-weight="700" font-family="Inter,sans-serif" style="text-transform:uppercase;letter-spacing:0.04em;">${label}</text>`;
+  }
+
+  let html = '';
+
+  // Background circle
+  html += `<circle cx="${cx}" cy="${cy}" r="${outerR + 5}" fill="#f0f2f5" stroke="#dde0e5" stroke-width="1"/>`;
+
+  // Compass lines
+  const directions = [
+    { label: "N", deg: 0 }, { label: "NE", deg: 45 },
+    { label: "E", deg: 90 }, { label: "SE", deg: 135 },
+    { label: "S", deg: 180 }, { label: "SW", deg: 225 },
+    { label: "W", deg: 270 }, { label: "NW", deg: 315 }
+  ];
+  directions.forEach(d => {
+    const rad = (d.deg - 90) * Math.PI / 180;
+    const x1 = cx + 30 * Math.cos(rad);
+    const y1 = cy + 30 * Math.sin(rad);
+    const x2 = cx + (outerR + 4) * Math.cos(rad);
+    const y2 = cy + (outerR + 4) * Math.sin(rad);
+    html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#c8cdd5" stroke-width="0.7"/>`;
+    // Label
+    const lx = cx + (outerR + 20) * Math.cos(rad);
+    const ly = cy + (outerR + 20) * Math.sin(rad);
+    html += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" fill="#5a6070" font-size="11" font-weight="700" font-family="Inter,sans-serif">${d.label}</text>`;
+  });
+
+  // Draw site arcs — outer ring (larger sites)
+  const outerSites = ["Beddingham", "High & Over", "West Flank", "Muggery", "Gribbles"];
+  const innerSites = ["Swan Borough", "Newhaven Cliffs", "Mt. Caburn"];
+
+  SITES.forEach(site => {
+    let r1, r2, textR;
+    if (outerSites.includes(site.name)) {
+      r1 = outerR; r2 = innerR; textR = (r1 + r2) / 2;
+    } else {
+      r1 = innerR - 4; r2 = innerR2; textR = (r1 + r2) / 2;
+    }
+    const status = currentWindDeg !== null ? getSiteStatus(currentWindDeg, site) : null;
+    let fill = site.color;
+    if (status === "green") fill = "var(--green)";
+    else if (status === "amber") fill = "var(--amber)";
+    else if (status === "red") fill = "#b0b8c4";
+
+    html += `<path d="${arcPath(cx, cy, r1, r2, site.start, site.end)}" fill="${fill}" stroke="white" stroke-width="1.5" opacity="0.92"/>`;
+    // Label — handle multi-word names
+    const nameLines = site.name.split(" ");
+    const isSmallArc = normalizeAngle(site.end - site.start) < 50;
+    const baseFontSize = isSmallArc ? 7 : 9;
+    if (nameLines.length > 2) {
+      // 3-word names like "High & Over"
+      html += textAtAngle(cx, cy, textR + 8, site.start, site.end, nameLines[0], baseFontSize);
+      html += textAtAngle(cx, cy, textR - 1, site.start, site.end, nameLines[1], baseFontSize - 1);
+      html += textAtAngle(cx, cy, textR - 10, site.start, site.end, nameLines[2], baseFontSize);
+    } else if (nameLines.length > 1) {
+      html += textAtAngle(cx, cy, textR + 5, site.start, site.end, nameLines[0], baseFontSize);
+      html += textAtAngle(cx, cy, textR - 6, site.start, site.end, nameLines[1], baseFontSize);
+    } else {
+      html += textAtAngle(cx, cy, textR, site.start, site.end, site.name, baseFontSize);
+    }
+  });
+
+  // Wind arrow (if we have data)
+  if (currentWindDeg !== null) {
+    const arrowRad = (currentWindDeg - 90) * Math.PI / 180;
+    const ax = cx + 55 * Math.cos(arrowRad);
+    const ay = cy + 55 * Math.sin(arrowRad);
+    const tailX = cx - 20 * Math.cos(arrowRad);
+    const tailY = cy - 20 * Math.sin(arrowRad);
+
+    // Arrow line
+    html += `<line x1="${tailX}" y1="${tailY}" x2="${ax}" y2="${ay}" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round"/>`;
+    // Arrowhead
+    const headLen = 10;
+    const headAng = 25 * Math.PI / 180;
+    const hx1 = ax - headLen * Math.cos(arrowRad - headAng);
+    const hy1 = ay - headLen * Math.sin(arrowRad - headAng);
+    const hx2 = ax - headLen * Math.cos(arrowRad + headAng);
+    const hy2 = ay - headLen * Math.sin(arrowRad + headAng);
+    html += `<polygon points="${ax},${ay} ${hx1},${hy1} ${hx2},${hy2}" fill="#c0392b"/>`;
+    // Center dot
+    html += `<circle cx="${cx}" cy="${cy}" r="5" fill="#c0392b"/>`;
+    html += `<circle cx="${cx}" cy="${cy}" r="3" fill="white"/>`;
+  } else {
+    html += `<circle cx="${cx}" cy="${cy}" r="5" fill="#5a6070"/>`;
+    html += `<circle cx="${cx}" cy="${cy}" r="3" fill="white"/>`;
+  }
+
+  svg.innerHTML = html;
+}
+
+// ==========================================================
+// RENDER FORECAST
+// ==========================================================
+function renderForecast(data) {
+  const container = document.getElementById("forecast-container");
+  const todaySection = document.getElementById("today-section");
+  const todayGrid = document.getElementById("today-grid");
+  const updateBadge = document.getElementById("update-time");
+
+  if (!data || !data.daily) {
+    container.innerHTML = '<div class="error-msg">Unable to load forecast data. Please try again later.</div>';
+    return;
+  }
+
+  const daily = data.daily;
+  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const now = new Date();
+
+  // Update timestamp
+  updateBadge.textContent = `Updated: ${now.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`;
+
+  // Today's current conditions
+  if (data.current) {
+    todaySection.style.display = "block";
+    const cur = data.current;
+    const windDir = cur.wind_direction_10m;
+    const windSpd = msToMph(cur.wind_speed_10m);
+    const gustSpd = cur.wind_gusts_10m ? msToMph(cur.wind_gusts_10m) : "—";
+    const temp = cur.temperature_2m ? cur.temperature_2m.toFixed(1) : "—";
+
+    drawCompassRose(windDir);
+
+    todayGrid.innerHTML = `
+      <div class="today-stat">
+        <div class="label">Wind Direction</div>
+        <div class="value">${degToCompass(windDir)}</div>
+        <div class="unit">${Math.round(windDir)}°</div>
+      </div>
+      <div class="today-stat">
+        <div class="label">Wind Speed</div>
+        <div class="value">${windSpd}</div>
+        <div class="unit">mph</div>
+      </div>
+      <div class="today-stat">
+        <div class="label">Wind Gusts</div>
+        <div class="value">${gustSpd}</div>
+        <div class="unit">mph</div>
+      </div>
+      <div class="today-stat">
+        <div class="label">Temperature</div>
+        <div class="value">${temp}</div>
+        <div class="unit">°C</div>
+      </div>
+    `;
+  } else {
+    drawCompassRose(daily.wind_direction_10m_dominant ? daily.wind_direction_10m_dominant[0] : null);
+  }
+
+  // 14-day cards
+  let cardsHtml = '<div class="forecast-grid">';
+
+  const numDays = Math.min(daily.time.length, 16);
+  for (let i = 0; i < numDays; i++) {
+    const date = new Date(daily.time[i] + "T12:00:00");
+    const dayName = dayNames[date.getDay()];
+    const dateStr = `${date.getDate()} ${monthNames[date.getMonth()]}`;
+    const isToday = i === 0;
+
+    const windDir = daily.wind_direction_10m_dominant[i];
+    const windSpdRaw = daily.wind_speed_10m_max[i];
+    const gustRaw = daily.wind_gusts_10m_max ? daily.wind_gusts_10m_max[i] : null;
+    const hasData = windDir !== null && windSpdRaw !== null;
+    const windSpd = hasData ? msToMph(windSpdRaw) : "—";
+    const gustSpd = gustRaw !== null ? msToMph(gustRaw) : null;
+    const compassLabel = hasData ? degToCompass(windDir) : "—";
+    const isExtended = i >= 7;
+
+    // Wind arrow rotation: arrow points in the direction the wind is coming FROM
+    const arrowRotation = hasData ? windDir : 0;
+
+    // Site statuses
+    let sitesHtml = '';
+    SITES.forEach(site => {
+      if (!hasData) {
+        sitesHtml += `
+        <div class="site-row">
+          <span class="site-name">${site.name}</span>
+          <span class="site-status" style="background:#f0f1f3;color:#8891a0;">NO DATA</span>
+        </div>`;
+        return;
+      }
+      const status = getSiteStatus(windDir, site);
+      const statusLabel = status === "green" ? "Flyable" : status === "amber" ? "Marginal" : "Off Wind";
+      sitesHtml += `
+        <div class="site-row">
+          <span class="site-name">${site.name}</span>
+          <span class="site-status status-${status}">${statusLabel}</span>
+        </div>`;
+    });
+
+    const extendedBadge = isExtended ? '<span style="font-size:9px;background:#f0f1f3;color:#8891a0;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px;">EXTENDED</span>' : '';
+
+    cardsHtml += `
+      <div class="day-card" ${isToday ? 'style="border-color: var(--accent); border-width: 2px;"' : ''} ${!hasData ? 'style="opacity:0.5"' : ''}>
+        <div class="day-card-header">
+          <span class="day-name">${isToday ? "Today" : dayName}${extendedBadge}</span>
+          <span class="day-date">${dateStr}</span>
+        </div>
+        <div class="day-card-wind">
+          <div class="wind-arrow-container" ${!hasData ? 'style="opacity:0.3"' : ''}>
+            <svg class="wind-arrow" viewBox="0 0 24 24" style="transform: rotate(${arrowRotation}deg);">
+              <path d="M12 2 L8 10 L11 9 L11 22 L13 22 L13 9 L16 10 Z" fill="var(--accent)" />
+            </svg>
+          </div>
+          <div class="wind-details">
+            <div class="wind-direction-label">${compassLabel} ${hasData ? `<span style="font-weight:400;font-size:12px;color:var(--text-muted)">(${Math.round(windDir)}°)</span>` : ''}</div>
+            <div class="wind-speed">${hasData ? `Max: ${windSpd} mph` : 'No forecast data'}</div>
+            ${gustSpd ? `<div class="wind-gust">Gusts: ${gustSpd} mph</div>` : ''}
+          </div>
+        </div>
+        <div class="day-card-sites">${sitesHtml}</div>
+      </div>`;
+  }
+
+  cardsHtml += '</div>';
+  container.innerHTML = cardsHtml;
+}
+
+// ==========================================================
+// FETCH DATA — Open-Meteo UKMO API
+// ==========================================================
+async function fetchForecast() {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=wind_speed_10m_max,wind_direction_10m_dominant,wind_gusts_10m_max,temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&current=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code&wind_speed_unit=ms&timezone=Europe/London&forecast_days=16`;
+
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    renderForecast(data);
+  } catch (err) {
+    console.error("Fetch error:", err);
+    document.getElementById("forecast-container").innerHTML =
+      `<div class="error-msg">Failed to fetch weather data: ${err.message}. Please check your internet connection and try again.</div>`;
+    drawCompassRose(null);
+  }
+}
+
+// Initial draw and fetch
+drawCompassRose(null);
+fetchForecast();
+
+// Auto-refresh every 30 minutes
+setInterval(fetchForecast, 30 * 60 * 1000);
+</script>
+
+</body>
+</html>
