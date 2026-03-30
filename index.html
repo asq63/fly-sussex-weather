@@ -547,7 +547,7 @@
   <div class="info-bar">
     <div class="legend">
       <div class="legend-item"><div class="legend-swatch swatch-green"></div> Great day to Fly (&lt;10 mph, dry)</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#5cb85c;"></div> Marginal Good</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#5cb85c;"></div> Good day</div>
       <div class="legend-item"><div class="legend-swatch swatch-amber"></div> Marginal</div>
       <div class="legend-item"><div class="legend-swatch swatch-red"></div> Off Wind</div>
       <div class="legend-item"><div class="legend-swatch" style="background:#1a1a1a;"></div> Outside Sunset</div>
@@ -653,7 +653,7 @@ function distToArc(angle, start, end) {
 
 // Determine status for a site given wind direction, speed (mph), and rain
 // Green (Great day to Fly): direction in arc, speed < 10, no rain
-// Marginal Good: direction in arc, speed < 10, gusts < 20, rain < 25%
+// Good day: direction in arc, speed < 10, gusts < 20, rain < 25%
 // Marginal: direction in arc, speed 10-12 mph; or near direction, light wind
 // Red (Off Wind): wind >= 12 or wrong direction
 // Extended model (days 8-16): max status is marginal
@@ -683,7 +683,7 @@ function getSiteStatus(windDeg, site, windSpeedMph, isRaining, isExtendedDay, op
   // Green (Great day to Fly): direction match, wind < 10, gusts < 10, dry (no rain)
   if (inArc && lightWind && lightGust && !isRaining && rainProb === 0) return "green";
 
-  // Marginal Good: direction match, wind < 10, gusts < 20 (but >= 10), rain < 25%
+  // Good day: direction match, wind < 10, gusts < 20 (but >= 10), rain < 25%
   if (inArc && lightWind && gustMph < 20 && rainProb < 25) return "marginal-good";
 
   // Marginal: on wind but 10-12 mph; or near direction with light wind
@@ -1071,7 +1071,7 @@ function renderForecast(data) {
       bestStatusLabel = 'Great day to Fly';
       bestStatusColor = '#4ade80';
     } else if (hasMargGoodSites) {
-      bestStatusLabel = 'Marginal Good';
+      bestStatusLabel = 'Good day';
       bestStatusColor = '#5cb85c';
     } else if (hasAmberSites) {
       bestStatusLabel = 'Marginal';
@@ -1164,7 +1164,7 @@ function renderForecast(data) {
       const cardSpeedMph = parseFloat(windSpd);
       const cardGustMph = gustSpd !== null ? parseFloat(gustSpd) : 0;
       const status = getSiteStatus(windDir, site, cardSpeedMph, dayIsRainy, isExtended, { gustMph: cardGustMph, rainProb: precipProb });
-      const statusLabel = status === "green" ? "Great day to Fly" : status === "marginal-good" ? "Marginal Good" : status === "amber" ? "Marginal" : "Off Wind";
+      const statusLabel = status === "green" ? "Great day to Fly" : status === "marginal-good" ? "Good day" : status === "amber" ? "Marginal" : "Off Wind";
       sitesHtml += `
         <div class="site-row">
           <span class="site-name">${site.name}</span>
