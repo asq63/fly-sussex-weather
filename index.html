@@ -546,7 +546,7 @@
 
   <div class="info-bar">
     <div class="legend">
-      <div class="legend-item"><div class="legend-swatch swatch-green"></div> On Wind (&lt;10 mph, dry)</div>
+      <div class="legend-item"><div class="legend-swatch swatch-green"></div> Great day to Fly (&lt;10 mph, dry)</div>
       <div class="legend-item"><div class="legend-swatch" style="background:#5cb85c;"></div> Marginal Good</div>
       <div class="legend-item"><div class="legend-swatch swatch-amber"></div> Marginal</div>
       <div class="legend-item"><div class="legend-swatch swatch-red"></div> Off Wind</div>
@@ -652,7 +652,7 @@ function distToArc(angle, start, end) {
 }
 
 // Determine status for a site given wind direction, speed (mph), and rain
-// Green (On Wind): direction in arc, speed < 10, no rain
+// Green (Great day to Fly): direction in arc, speed < 10, no rain
 // Marginal Good: direction in arc, speed < 10, gusts < 20, rain < 25%
 // Marginal: direction in arc, speed 10-12 mph; or near direction, light wind
 // Red (Off Wind): wind >= 12 or wrong direction
@@ -680,7 +680,7 @@ function getSiteStatus(windDeg, site, windSpeedMph, isRaining, isExtendedDay, op
   const lightGust = gustMph < 10;
   const moderateWind = windSpeedMph >= 10 && windSpeedMph < 12;
 
-  // Green (On Wind): direction match, wind < 10, gusts < 10, dry (no rain)
+  // Green (Great day to Fly): direction match, wind < 10, gusts < 10, dry (no rain)
   if (inArc && lightWind && lightGust && !isRaining && rainProb === 0) return "green";
 
   // Marginal Good: direction match, wind < 10, gusts < 20 (but >= 10), rain < 25%
@@ -1068,7 +1068,7 @@ function renderForecast(data) {
     let bestStatusLabel = '';
     let bestStatusColor = '';
     if (hasGreenSites) {
-      bestStatusLabel = 'On Wind';
+      bestStatusLabel = 'Great day to Fly';
       bestStatusColor = '#4ade80';
     } else if (hasMargGoodSites) {
       bestStatusLabel = 'Marginal Good';
@@ -1164,7 +1164,7 @@ function renderForecast(data) {
       const cardSpeedMph = parseFloat(windSpd);
       const cardGustMph = gustSpd !== null ? parseFloat(gustSpd) : 0;
       const status = getSiteStatus(windDir, site, cardSpeedMph, dayIsRainy, isExtended, { gustMph: cardGustMph, rainProb: precipProb });
-      const statusLabel = status === "green" ? "On Wind" : status === "marginal-good" ? "Marginal Good" : status === "amber" ? "Marginal" : "Off Wind";
+      const statusLabel = status === "green" ? "Great day to Fly" : status === "marginal-good" ? "Marginal Good" : status === "amber" ? "Marginal" : "Off Wind";
       sitesHtml += `
         <div class="site-row">
           <span class="site-name">${site.name}</span>
