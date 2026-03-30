@@ -789,10 +789,10 @@ function drawCompassRose(currentWindDeg, currentWindSpeedMph, isRaining, current
     const speedForStatus = currentWindSpeedMph != null ? currentWindSpeedMph : 0;
     const raining = isRaining || false;
     let status = currentWindDeg !== null ? getSiteStatus(currentWindDeg, site, speedForStatus, raining, false, { gustMph: currentGustMph, rainProb: todayRainProb }) : null;
-    // Outside daylight hours, override green to show black
+    // Outside daylight hours, override green/good/marginal to show black
     const daylight = isDaylight();
     let fill = site.color;
-    if (!daylight && (status === "green" || status === "marginal-good")) {
+    if (!daylight && (status === "green" || status === "marginal-good" || status === "amber")) {
       fill = "#1a1a1a";
     } else if (status === "green") fill = "var(--green)";
     else if (status === "marginal-good") fill = "#5cb85c";
