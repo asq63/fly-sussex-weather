@@ -677,12 +677,13 @@ function getSiteStatus(windDeg, site, windSpeedMph, isRaining, isExtendedDay, op
 
   // Standard model days 1-7
   const lightWind = windSpeedMph < 10;
+  const lightGust = gustMph < 10;
   const moderateWind = windSpeedMph >= 10 && windSpeedMph < 12;
 
-  // Green: on wind, light wind, no rain
-  if (inArc && lightWind && !isRaining) return "green";
+  // Green (On Wind): direction match, wind < 10, gusts < 10, rain < 25%
+  if (inArc && lightWind && lightGust && rainProb < 25) return "green";
 
-  // Marginal Good: on wind, light wind, gusts < 20, rain < 25% (but has some rain)
+  // Marginal Good: direction match, wind < 10, gusts < 20 (but >= 10), rain < 25%
   if (inArc && lightWind && gustMph < 20 && rainProb < 25) return "marginal-good";
 
   // Marginal: on wind but 10-12 mph; or near direction with light wind
