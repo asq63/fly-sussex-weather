@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WIFS'S — Weather Information for Fly Sussex Sites</title>
+  <title>Weather Information for Fly Sussex Sites - WIF</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @keyframes dance {
+      0% { transform: translateY(0) rotate(-8deg); }
+      50% { transform: translateY(-4px) rotate(8deg); }
+      100% { transform: translateY(0) rotate(-8deg); }
+    }
 
     :root {
       --green: #1a8a3f;
@@ -36,19 +42,33 @@
 
     /* Header */
     .header {
-      background: linear-gradient(135deg, #1a3c5e 0%, #1a5276 50%, #1f6f8b 100%);
+      background: linear-gradient(rgba(26,60,94,0.45), rgba(26,60,94,0.45)), url("data:image/jpeg;base64,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") center/cover no-repeat;
       color: white;
       padding: 24px 20px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
-    .header::before {
-      content: '';
+
+    .header .header-img {
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      top: 50%;
+      transform: translateY(-50%);
+      height: 70px;
       pointer-events: none;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    .header .header-img-left {
+      left: 20px;
+      height: 70px;
+      border-radius: 50%;
+    }
+    .header .header-img-right {
+      right: 20px;
+      height: 68px;
+      border-radius: 6px;
+      opacity: 0.9;
     }
     .header h1 {
       font-size: 22px;
@@ -119,6 +139,16 @@
       font-size: 12px;
       font-weight: 500;
     }
+    .legend-swatch-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+    .legend-emoji {
+      font-size: 10px;
+      line-height: 1;
+    }
     .legend-swatch {
       width: 14px; height: 14px;
       border-radius: 3px;
@@ -137,170 +167,289 @@
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
-      text-align: center;
+      position: relative;
     }
     .compass-section h2 {
       font-size: 15px;
       font-weight: 700;
       color: var(--text-primary);
-      margin-bottom: 4px;
+      margin-bottom: 0;
+      text-align: center;
     }
     .compass-section .compass-subtitle {
       font-size: 12px;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-top: 0;
+      margin-bottom: 0;
+      text-align: center;
+    }
+    .compass-layout {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      position: relative;
     }
     .compass-container {
       display: inline-block;
       position: relative;
+      flex-shrink: 0;
     }
 
-    /* Today highlight */
-    .today-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
+    /* Flyable days panel — left of compass */
+    .flyable-days-panel {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(26, 60, 94, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: white;
+      min-width: 150px;
+      max-width: 200px;
+      z-index: 10;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      overflow-y: auto;
+      max-height: calc(100% - 32px);
     }
-    .today-section h2 {
-      font-size: 15px;
+    .flyable-days-panel .mini-title {
+      font-size: 8px;
       font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .today-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-    }
-    .today-stat {
-      background: var(--surface-alt);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-    }
-    .today-stat .label {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
+      letter-spacing: 0.08em;
+      color: #7ec8e3;
+      margin-bottom: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding-bottom: 4px;
     }
-    .today-stat .value {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-primary);
+    .flyable-day-row {
+      display: grid;
+      grid-template-columns: 8px 32px 36px 1fr;
+      align-items: center;
+      gap: 4px;
+      padding: 2.5px 0;
+      line-height: 1;
     }
-    .today-stat .unit {
-      font-size: 12px;
+    .flyable-day-row + .flyable-day-row {
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .flyable-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .flyable-dot-green { background: #4ade80; }
+    .flyable-dot-amber { background: #fbbf24; }
+    .flyable-dot-red { background: #f87171; }
+    .flyable-day-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+    }
+    .flyable-day-date {
+      font-size: 9px;
       font-weight: 500;
-      color: var(--text-secondary);
+      color: rgba(255,255,255,0.45);
+      white-space: nowrap;
     }
+    .flyable-day-sites {
+      font-size: 8px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .flyable-none-msg {
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      font-style: italic;
+      padding: 2px 0;
+    }
+
+    /* Mini dashboard overlay — top right of compass section */
+    .mini-dashboard {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(26, 60, 94, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: white;
+      min-width: 150px;
+      z-index: 10;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .mini-dashboard .mini-title {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #7ec8e3;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding-bottom: 6px;
+    }
+    .mini-dashboard .mini-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+    .mini-dashboard .mini-row + .mini-row {
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .mini-dashboard .mini-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      white-space: nowrap;
+    }
+    .mini-dashboard .mini-value {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+    .mini-dashboard .mini-unit {
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      margin-left: 2px;
+    }
+
+    /* (today-section removed — replaced by mini-dashboard) */
 
     /* Forecast grid */
     .forecast-section h2 {
-      font-size: 15px;
+      font-size: 12px;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 6px;
     }
     .forecast-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 4px;
     }
 
     /* Day card */
     .day-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 6px;
       overflow: hidden;
       transition: box-shadow 0.15s ease;
     }
-    .day-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .day-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .day-card-header {
-      padding: 10px 14px;
+      padding: 3px 6px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .day-card-header .day-name {
-      font-size: 13px;
+      font-size: 9px;
       font-weight: 700;
       color: var(--text-primary);
     }
     .day-card-header .day-date {
-      font-size: 11px;
+      font-size: 8px;
       color: var(--text-muted);
       font-weight: 500;
     }
     .day-card-wind {
-      padding: 12px 14px;
+      padding: 4px 6px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 5px;
     }
     .wind-arrow-container {
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: var(--surface-alt);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
+      position: relative;
     }
+    .wind-arrow-container .nesw {
+      position: absolute;
+      font-size: 5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .wind-arrow-container .nesw-n { top: 1px; left: 50%; transform: translateX(-50%); }
+    .wind-arrow-container .nesw-s { bottom: 1px; left: 50%; transform: translateX(-50%); }
+    .wind-arrow-container .nesw-e { right: 1px; top: 50%; transform: translateY(-50%); }
+    .wind-arrow-container .nesw-w { left: 1px; top: 50%; transform: translateY(-50%); }
     .wind-arrow {
-      width: 24px;
-      height: 24px;
+      width: 14px;
+      height: 14px;
       transition: transform 0.3s ease;
     }
     .wind-details { flex: 1; min-width: 0; }
     .wind-direction-label {
-      font-size: 15px;
+      font-size: 9px;
       font-weight: 700;
     }
     .wind-speed {
-      font-size: 12px;
+      font-size: 8px;
       color: var(--text-secondary);
       font-weight: 500;
     }
     .wind-gust {
-      font-size: 11px;
+      font-size: 7.5px;
       color: var(--text-muted);
+    }
+    .sun-times {
+      font-size: 7.5px;
+      color: var(--text-muted);
+      margin-top: 0;
     }
 
     /* Sites list in card */
     .day-card-sites {
-      padding: 0 14px 12px;
+      padding: 0 6px 4px;
     }
     .site-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 5px 0;
+      padding: 1.5px 0;
       border-top: 1px solid #f0f1f3;
     }
     .site-row:first-child { border-top: none; }
     .site-name {
-      font-size: 11px;
+      font-size: 7.5px;
       font-weight: 600;
       color: var(--text-secondary);
     }
     .site-status {
-      font-size: 10px;
+      font-size: 7px;
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 1px 4px;
+      border-radius: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
     .status-green {
       background: var(--green-bg);
       color: var(--green);
+    }
+    .status-marginal-good {
+      background: #e8f5e9;
+      color: #2e7d32;
     }
     .status-amber {
       background: var(--amber-bg);
@@ -348,57 +497,84 @@
     .footer a { color: var(--accent); text-decoration: none; }
 
     /* Responsive */
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
+      .header-img { display: none; }
       .header h1 { font-size: 18px; }
       .forecast-grid { grid-template-columns: 1fr; }
       .info-bar { flex-direction: column; gap: 8px; }
-      .today-grid { grid-template-columns: repeat(2, 1fr); }
+      .flyable-days-panel {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin: 0 auto 12px;
+        width: 100%;
+        max-width: 260px;
+      }
+      .mini-dashboard {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 0 auto 12px;
+        width: 100%;
+        max-width: 260px;
+      }
+      .compass-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .compass-section h2,
+      .compass-section .compass-subtitle {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="header">
+    <img class="header-img header-img-left" src="data:image/jpeg;base64,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" alt="Fly Sussex logo">
+    <img class="header-img header-img-right" src="data:image/jpeg;base64,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" alt="Fly Sussex paraglider">
     <h1>
-      <svg class="logo-icon" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="WIFS logo">
-        <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1.5" fill="none" opacity="0.3"/>
-        <path d="M16 4 L16 28 M4 16 L28 16 M7.5 7.5 L24.5 24.5 M24.5 7.5 L7.5 24.5" stroke="white" stroke-width="0.7" opacity="0.2"/>
-        <path d="M16 6 C18 12, 22 14, 22 18 C22 22, 19.3 24, 16 24 C12.7 24, 10 22, 10 18 C10 14, 14 12, 16 6Z" fill="white" opacity="0.9"/>
-        <path d="M16 10 L17.5 15 L15 13.5 L16.5 18 L14 16 Z" fill="#1a5276" opacity="0.6"/>
-      </svg>
-      <span>WIFS'S</span> — Weather Information for Fly Sussex Sites
+      Weather Information for Fly Sussex Sites - <span>WIF</span>
     </h1>
-    <div class="subtitle">Beddingham, Lewes, East Sussex &middot; Powered by Met Office (UKMO) data via Open-Meteo</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;letter-spacing:0.05em;">Version: 1.02</div>
+    <div style="font-size:10px;color:#ffd700;margin-top:1px;letter-spacing:0.03em;">Data Updates Every Hour</div>
+    <div id="flyable-banner" style="display:none;margin-top:6px;"></div>
+
   </div>
 
   <div class="info-bar">
     <div class="legend">
-      <div class="legend-item"><div class="legend-swatch swatch-green"></div> On Wind — Flyable</div>
-      <div class="legend-item"><div class="legend-swatch swatch-amber"></div> Near — Marginal</div>
-      <div class="legend-item"><div class="legend-swatch swatch-red"></div> Off Wind — Not Suitable</div>
+      <div class="legend-item"><div class="legend-swatch swatch-green"></div> On Wind (&lt;10 mph, dry)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#5cb85c;"></div> Marginal Good</div>
+      <div class="legend-item"><div class="legend-swatch swatch-amber"></div> Marginal</div>
+      <div class="legend-item"><div class="legend-swatch swatch-red"></div> Off Wind</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#1a1a1a;"></div> Outside Sunset</div>
     </div>
     <div class="badge" id="update-time">Loading...</div>
   </div>
 
   <div class="main">
-    <!-- Compass Rose -->
+    <!-- Compass Rose with mini dashboard -->
     <div class="compass-section">
-      <h2>Fly Sussex Site Wind Rose</h2>
-      <p class="compass-subtitle">Sites and their flyable wind directions</p>
-      <div class="compass-container">
-        <svg id="compass-rose" width="380" height="380" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg"></svg>
+      <h2 style="font-size:18px;color:#0a2540;">Fly Sussex Site Wind Rose</h2>
+      <p class="compass-subtitle" style="color:#0a2540;font-weight:700;">Sites and their flyable wind directions</p>
+      <div id="flyable-days" class="flyable-days-panel" style="display:none;"></div>
+      <div id="mini-dashboard" class="mini-dashboard" style="display:none;"></div>
+      <div id="current-time" style="text-align:center;font-size:12px;font-weight:700;color:#c0392b;margin-top:0;margin-bottom:4px;letter-spacing:0.02em;"></div>
+      <div class="compass-container" style="display:block;text-align:center;">
+        <svg id="compass-rose" width="340" height="340" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
+
+      <div style="margin-top:12px;text-align:center;max-width:560px;margin-left:auto;margin-right:auto;font-size:9px;color:var(--text-secondary);line-height:1.6;">
+        <span style="font-weight:700;color:#c0392b;">Safety First:</span><br>Will Geordie Have His Cat Aboard Today. <strong>W</strong> - Wind/Weather: Is it safe to fly, <strong>G</strong> - Glider: Is it laid out correctly, with no tangles in lines or damage, <strong>H</strong> - Harness: Are you strapped in correctly (leg loops and chest strap), <strong>H</strong> - Helmet: Is it on and fastened, <strong>C</strong> - Controls: Are the all lines clear, brakes correctly in hand, and the correct, <strong>A</strong> - Airspace: Is the takeoff area clear, <strong>T</strong> - Turn Direction: For reverse launching, which way are you turning
+      </div>
+
     </div>
 
-    <!-- Today's conditions -->
-    <div class="today-section" id="today-section" style="display:none;">
-      <h2>Current Conditions</h2>
-      <div class="today-grid" id="today-grid"></div>
-    </div>
-
-    <!-- 14-day forecast -->
-    <div class="forecast-section">
-      <h2>16-Day Forecast <span style="font-size:11px;font-weight:500;color:var(--text-muted);">(Days 8–16 use extended models)</span></h2>
+    <!-- 16-day forecast -->
+    <div class="forecast-section">      <h2>16-Day Forecast <span style="font-size:11px;font-weight:500;color:var(--text-muted);">(Days 8–16 use extended models)</span></h2>
       <div id="forecast-container">
         <div class="loading">
           <div class="spinner"></div>
@@ -408,11 +584,7 @@
     </div>
   </div>
 
-  <div class="footer">
-    Weather data: <a href="https://www.metoffice.gov.uk/" target="_blank" rel="noopener">Met Office UK (UKMO)</a> via
-    <a href="https://open-meteo.com/en/docs/ukmo-api" target="_blank" rel="noopener">Open-Meteo</a> &middot;
-    Data updates every 6 hours &middot; &copy; 2026 Fly Sussex
-  </div>
+
 
 <script>
 // ==========================================================
@@ -434,6 +606,18 @@ const SITES = [
 // Beddingham, Lewes coordinates
 const LAT = 50.856;
 const LON = 0.025;
+
+// Sunrise/sunset for today (set from API data)
+let todaySunrise = null;
+let todaySunset = null;
+
+function isDaylight() {
+  if (!todaySunrise || !todaySunset) return true; // default to daylight if no data
+  const now = new Date();
+  const rise = new Date(todaySunrise);
+  const set = new Date(todaySunset);
+  return now >= rise && now <= set;
+}
 
 // ==========================================================
 // WIND DIRECTION UTILITIES
@@ -467,15 +651,45 @@ function distToArc(angle, start, end) {
   return Math.min(angleDist(angle, start), angleDist(angle, end));
 }
 
-// Determine status for a site given wind direction in degrees
-// Green: wind is within the site's arc
-// Amber: wind is within 22.5° of the arc edge
-// Red: otherwise
-function getSiteStatus(windDeg, site) {
-  if (isInArc(windDeg, site.start, site.end)) return "green";
+// Determine status for a site given wind direction, speed (mph), and rain
+// Green (On Wind): direction in arc, speed < 10, no rain
+// Marginal Good: direction in arc, speed < 10, gusts < 20, rain < 25%
+// Marginal: direction in arc, speed 10-12 mph; or near direction, light wind
+// Red (Off Wind): wind >= 12 or wrong direction
+// Extended model (days 8-16): max status is marginal
+// opts: { gustMph, rainProb } — extra params for checks
+function getSiteStatus(windDeg, site, windSpeedMph, isRaining, isExtendedDay, opts) {
+  const inArc = isInArc(windDeg, site.start, site.end);
   const dist = distToArc(windDeg, site.start, site.end);
-  if (dist <= 22.5) return "amber";
-  return "red";
+  const isNear = dist <= 22.5;
+  const gustMph = (opts && opts.gustMph != null) ? opts.gustMph : 0;
+  const rainProb = (opts && opts.rainProb != null) ? opts.rainProb : 0;
+
+  if (isExtendedDay) {
+    // Extended model days 8-16: ALL criteria must be met for marginal
+    // wind < 12 mph, gusts < 20 mph, rain prob < 25%, direction match
+    const extMeetsCriteria = windSpeedMph < 12 && gustMph < 20 && rainProb < 25;
+    if (!extMeetsCriteria) return "red";
+    if (inArc) return "amber";
+    if (isNear) return "amber";
+    return "red";
+  }
+
+  // Standard model days 1-7
+  const lightWind = windSpeedMph < 10;
+  const moderateWind = windSpeedMph >= 10 && windSpeedMph < 12;
+
+  // Green: on wind, light wind, no rain
+  if (inArc && lightWind && !isRaining) return "green";
+
+  // Marginal Good: on wind, light wind, gusts < 20, rain < 25% (but has some rain)
+  if (inArc && lightWind && gustMph < 20 && rainProb < 25) return "marginal-good";
+
+  // Marginal: on wind but 10-12 mph; or near direction with light wind
+  if (inArc && moderateWind) return "amber";
+  if (isNear && lightWind && !isRaining) return "amber";
+
+  return "red";  // wind >= 12 mph or off wind
 }
 
 // Degrees to compass label
@@ -492,10 +706,12 @@ function msToMph(ms) {
 // ==========================================================
 // COMPASS ROSE SVG
 // ==========================================================
-function drawCompassRose(currentWindDeg) {
+function drawCompassRose(currentWindDeg, currentWindSpeedMph, isRaining, currentGustMph, todayRainProb) {
+  currentGustMph = currentGustMph || 0;
+  todayRainProb = todayRainProb || 0;
   const svg = document.getElementById("compass-rose");
-  const cx = 190, cy = 190;
-  const outerR = 150, innerR = 105, innerR2 = 80;
+  const cx = 170, cy = 170;
+  const outerR = 132, innerR = 92, innerR2 = 70;
 
   // Helper: arc path
   function arcPath(cx, cy, r1, r2, startDeg, endDeg) {
@@ -530,7 +746,7 @@ function drawCompassRose(currentWindDeg) {
     let rot = midDeg + 90;
     if (rot > 90 && rot < 270) rot += 180; // Keep text readable
     const fs = fontSize || 9;
-    return `<text x="${x}" y="${y}" transform="rotate(${rot},${x},${y})" text-anchor="middle" dominant-baseline="central" fill="white" font-size="${fs}" font-weight="700" font-family="Inter,sans-serif" style="text-transform:uppercase;letter-spacing:0.04em;">${label}</text>`;
+    return `<text x="${x}" y="${y}" transform="rotate(${rot},${x},${y})" text-anchor="middle" dominant-baseline="central" fill="white" font-size="${fs}" font-weight="700" font-family="Inter,sans-serif" style="text-transform:uppercase;letter-spacing:0.04em;text-shadow:0 1px 2px rgba(0,0,0,0.3);" paint-order="stroke" stroke="rgba(0,0,0,0.15)" stroke-width="0.5">${label}</text>`;
   }
 
   let html = '';
@@ -569,11 +785,18 @@ function drawCompassRose(currentWindDeg) {
     } else {
       r1 = innerR - 4; r2 = innerR2; textR = (r1 + r2) / 2;
     }
-    const status = currentWindDeg !== null ? getSiteStatus(currentWindDeg, site) : null;
+    const speedForStatus = currentWindSpeedMph != null ? currentWindSpeedMph : 0;
+    const raining = isRaining || false;
+    let status = currentWindDeg !== null ? getSiteStatus(currentWindDeg, site, speedForStatus, raining, false, { gustMph: currentGustMph, rainProb: todayRainProb }) : null;
+    // Outside daylight hours, override green to show black
+    const daylight = isDaylight();
     let fill = site.color;
-    if (status === "green") fill = "var(--green)";
+    if (!daylight && (status === "green" || status === "marginal-good")) {
+      fill = "#1a1a1a";
+    } else if (status === "green") fill = "var(--green)";
+    else if (status === "marginal-good") fill = "#5cb85c";
     else if (status === "amber") fill = "var(--amber)";
-    else if (status === "red") fill = "#b0b8c4";
+    else if (status === "red") fill = "#c9b3b3";
 
     html += `<path d="${arcPath(cx, cy, r1, r2, site.start, site.end)}" fill="${fill}" stroke="white" stroke-width="1.5" opacity="0.92"/>`;
     // Label — handle multi-word names
@@ -627,8 +850,7 @@ function drawCompassRose(currentWindDeg) {
 // ==========================================================
 function renderForecast(data) {
   const container = document.getElementById("forecast-container");
-  const todaySection = document.getElementById("today-section");
-  const todayGrid = document.getElementById("today-grid");
+  const miniDash = document.getElementById("mini-dashboard");
   const updateBadge = document.getElementById("update-time");
 
   if (!data || !data.daily) {
@@ -644,47 +866,264 @@ function renderForecast(data) {
   // Update timestamp
   updateBadge.textContent = `Updated: ${now.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`;
 
-  // Today's current conditions
+  // Mini dashboard — current conditions in top-right of compass
   if (data.current) {
-    todaySection.style.display = "block";
     const cur = data.current;
     const windDir = cur.wind_direction_10m;
     const windSpd = msToMph(cur.wind_speed_10m);
-    const gustSpd = cur.wind_gusts_10m ? msToMph(cur.wind_gusts_10m) : "—";
-    const temp = cur.temperature_2m ? cur.temperature_2m.toFixed(1) : "—";
+    const gustSpd = cur.wind_gusts_10m ? msToMph(cur.wind_gusts_10m) : "\u2014";
+    const temp = cur.temperature_2m != null ? cur.temperature_2m.toFixed(1) : "\u2014";
 
-    drawCompassRose(windDir);
+    const windSpdMph = parseFloat(windSpd);
+    const gustSpdMph = cur.wind_gusts_10m ? parseFloat(msToMph(cur.wind_gusts_10m)) : 0;
+    const currentPrecip = cur.precipitation != null ? cur.precipitation : 0;
+    const currentlyRaining = currentPrecip > 0;
+    const todayPrecipProb = daily.precipitation_probability_max ? daily.precipitation_probability_max[0] : 0;
 
-    todayGrid.innerHTML = `
-      <div class="today-stat">
-        <div class="label">Wind Direction</div>
-        <div class="value">${degToCompass(windDir)}</div>
-        <div class="unit">${Math.round(windDir)}°</div>
+    // Sunrise / Sunset from today's daily data — must be set BEFORE drawing compass
+    const sunriseRaw = daily.sunrise ? daily.sunrise[0] : null;
+    const sunsetRaw = daily.sunset ? daily.sunset[0] : null;
+    todaySunrise = sunriseRaw;
+    todaySunset = sunsetRaw;
+
+    drawCompassRose(windDir, windSpdMph, currentlyRaining, gustSpdMph, todayPrecipProb);
+
+    const rainLabel = currentlyRaining ? `<span style="color:#7ec8e3;">\u{1F327} ${currentPrecip.toFixed(1)} mm</span>` : `<span style="color:#4ade80;">None</span>`;
+    const formatSunTime = (iso) => {
+      if (!iso) return "\u2014";
+      const d = new Date(iso);
+      return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    };
+    const sunriseStr = formatSunTime(sunriseRaw);
+    const sunsetStr = formatSunTime(sunsetRaw);
+
+    miniDash.style.display = "block";
+    miniDash.innerHTML = `
+      <div class="mini-title">Current Conditions</div>
+      <div class="mini-row">
+        <span class="mini-label">Direction</span>
+        <span><span class="mini-value">${degToCompass(windDir)}</span><span class="mini-unit">${Math.round(windDir)}\u00b0</span></span>
       </div>
-      <div class="today-stat">
-        <div class="label">Wind Speed</div>
-        <div class="value">${windSpd}</div>
-        <div class="unit">mph</div>
+      <div class="mini-row">
+        <span class="mini-label">Speed</span>
+        <span><span class="mini-value">${windSpd}</span><span class="mini-unit">mph</span></span>
       </div>
-      <div class="today-stat">
-        <div class="label">Wind Gusts</div>
-        <div class="value">${gustSpd}</div>
-        <div class="unit">mph</div>
+      <div class="mini-row">
+        <span class="mini-label">Gusts</span>
+        <span><span class="mini-value">${gustSpd}</span><span class="mini-unit">mph</span></span>
       </div>
-      <div class="today-stat">
-        <div class="label">Temperature</div>
-        <div class="value">${temp}</div>
-        <div class="unit">°C</div>
+      <div class="mini-row">
+        <span class="mini-label">Temp</span>
+        <span><span class="mini-value">${temp}</span><span class="mini-unit">\u00b0C</span></span>
+      </div>
+      <div class="mini-row">
+        <span class="mini-label">Rain</span>
+        <span class="mini-value" style="font-size:13px;">${rainLabel}</span>
+      </div>
+      <div class="mini-row">
+        <span class="mini-label">\u2600\uFE0F Rise</span>
+        <span><span class="mini-value">${sunriseStr}</span></span>
+      </div>
+      <div class="mini-row">
+        <span class="mini-label">\uD83C\uDF05 Set</span>
+        <span><span class="mini-value">${sunsetStr}</span></span>
       </div>
     `;
   } else {
-    drawCompassRose(daily.wind_direction_10m_dominant ? daily.wind_direction_10m_dominant[0] : null);
+    const fallbackSpd = daily.wind_speed_10m_max[0] != null ? parseFloat(msToMph(daily.wind_speed_10m_max[0])) : null;
+    const fallbackRain = daily.precipitation_sum && daily.precipitation_sum[0] != null ? daily.precipitation_sum[0] > 0 : false;
+    drawCompassRose(daily.wind_direction_10m_dominant ? daily.wind_direction_10m_dominant[0] : null, fallbackSpd, fallbackRain);
   }
+
+  // "It's Flyable" banner — checks all forecast days for flyable conditions:
+  // wind < 10 mph, gusts <= 20 mph, rain prob < 25%, and green/marginal sites exist
+  const flyBanner = document.getElementById("flyable-banner");
+  const dayNamesShort = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const monthNamesShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let flyableDaysList = [];
+
+  if (daily) {
+    const fDays = Math.min(daily.time.length, 16);
+    for (let fi = 0; fi < fDays; fi++) {
+      const fWindMax = daily.wind_speed_10m_max[fi];
+      const fGustMax = daily.wind_gusts_10m_max ? daily.wind_gusts_10m_max[fi] : 0;
+      const fRainProb = daily.precipitation_probability_max ? daily.precipitation_probability_max[fi] : 0;
+      const fWindDir = daily.wind_direction_10m_dominant[fi];
+      const fPrecipSum = daily.precipitation_sum ? daily.precipitation_sum[fi] : 0;
+      if (fWindMax == null || fWindDir == null) continue;
+
+      const fWindMph = parseFloat(msToMph(fWindMax));
+      const fGustMph = parseFloat(msToMph(fGustMax));
+      const fRainy = (fPrecipSum > 0) || (fRainProb >= 50);
+      const fIsExtended = fi >= 7; // Days 8-16 use extended model
+
+      // Check flyable criteria — extended days use relaxed wind threshold (12 mph)
+      const windLimit = fIsExtended ? 12 : 10;
+      if (fWindMph >= windLimit || fGustMph > 20 || fRainProb >= 25) continue;
+
+      // Check if any sites are green or amber
+      let hasGoodSite = false;
+      SITES.forEach(site => {
+        const st = getSiteStatus(fWindDir, site, fWindMph, fRainy, fIsExtended, { gustMph: fGustMph, rainProb: fRainProb });
+        if (st === "green" || st === "marginal-good" || st === "amber") hasGoodSite = true;
+      });
+
+      if (hasGoodSite) {
+        const fDate = new Date(daily.time[fi] + "T12:00:00");
+        const label = fi === 0 ? "Today" : fi === 1 ? "Tomorrow" : dayNamesShort[fDate.getDay()] + " " + fDate.getDate() + " " + monthNamesShort[fDate.getMonth()];
+        flyableDaysList.push(label);
+      }
+    }
+  }
+
+  if (flyableDaysList.length > 0) {
+    flyBanner.style.display = "block";
+    flyBanner.innerHTML = `
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(26,138,63,0.9);padding:6px 18px;border-radius:20px;">
+        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 10C4 5 9 2 16 2C23 2 28 5 28 10C28 11 27.5 11.5 27 12H5C4.5 11.5 4 11 4 10Z" fill="white" opacity="0.95"/>
+          <line x1="8" y1="12" x2="14" y2="22" stroke="white" stroke-width="0.8"/>
+          <line x1="24" y1="12" x2="18" y2="22" stroke="white" stroke-width="0.8"/>
+          <line x1="12" y1="12" x2="15" y2="22" stroke="white" stroke-width="0.6" opacity="0.6"/>
+          <line x1="20" y1="12" x2="17" y2="22" stroke="white" stroke-width="0.6" opacity="0.6"/>
+          <ellipse cx="16" cy="24" rx="2.5" ry="3.5" fill="white" opacity="0.9"/>
+        </svg>
+        <span style="color:white;font-weight:700;font-size:14px;letter-spacing:0.03em;">Its looking good for flying</span>
+        <span style="color:rgba(255,255,255,0.85);font-size:11px;font-weight:500;">${flyableDaysList.join(", ")}</span>
+      </div>`;
+  } else {
+    flyBanner.style.display = "none";
+    flyBanner.innerHTML = "";
+  }
+
+  // Number of forecast days
+  const numDays = Math.min(daily.time.length, 16);
+
+  // Flyable days panel — left side of compass rose
+  // Uses flyable criteria: wind < 10 mph, gusts <= 20 mph, rain prob < 25%, green/amber sites
+  const flyableDaysEl = document.getElementById("flyable-days");
+  let flyableHtml = '<div class="mini-title">16-Day Outlook</div>';
+  let anyFlyable = false;
+  let flyableCount = 0;
+  let flyableDaySummary = [];
+
+  for (let d = 0; d < numDays; d++) {
+    const fDate = new Date(daily.time[d] + "T12:00:00");
+    const fDayName = d === 0 ? "Today" : d === 1 ? "Tmrw" : dayNames[fDate.getDay()].slice(0, 3);
+    const fDateStr = `${fDate.getDate()} ${monthNames[fDate.getMonth()]}`;
+    const fWindDir = daily.wind_direction_10m_dominant[d];
+    const fWindSpdRaw = daily.wind_speed_10m_max[d];
+    const fGustRaw = daily.wind_gusts_10m_max ? daily.wind_gusts_10m_max[d] : 0;
+    const fPrecipSum = daily.precipitation_sum ? daily.precipitation_sum[d] : 0;
+    const fPrecipProb = daily.precipitation_probability_max ? daily.precipitation_probability_max[d] : 0;
+    const fRainy = (fPrecipSum != null && fPrecipSum > 0) || (fPrecipProb != null && fPrecipProb >= 50);
+    const fHasData = fWindDir !== null && fWindSpdRaw !== null;
+
+    if (!fHasData) continue;
+
+    const fSpeedMph = parseFloat(msToMph(fWindSpdRaw));
+    const fGustMph = parseFloat(msToMph(fGustRaw));
+    const fIsExtended = d >= 7; // Days 8-16 use extended model
+
+    // Check flyable criteria — extended days use relaxed wind threshold (12 mph)
+    const fWindLimit = fIsExtended ? 12 : 10;
+    const meetsFlyable = fSpeedMph < fWindLimit && fGustMph <= 20 && fPrecipProb < 25;
+
+    let greenSites = [];
+    let margGoodSites = [];
+    let amberSites = [];
+    SITES.forEach(site => {
+      const st = getSiteStatus(fWindDir, site, fSpeedMph, fRainy, fIsExtended, { gustMph: fGustMph, rainProb: fPrecipProb });
+      if (st === "green") greenSites.push(site.name);
+      else if (st === "marginal-good") margGoodSites.push(site.name);
+      else if (st === "amber") amberSites.push(site.name);
+    });
+
+    const hasGreenSites = greenSites.length > 0;
+    const hasMargGoodSites = margGoodSites.length > 0;
+    const hasAmberSites = amberSites.length > 0;
+    const hasAnySites = hasGreenSites || hasMargGoodSites || hasAmberSites;
+
+    // Determine best status for this day — match what the forecast cards show
+    let dayDot, dayStatus;
+    if (hasGreenSites) {
+      dayDot = "green";
+      dayStatus = greenSites.join(", ");
+      anyFlyable = true;
+    } else if (hasMargGoodSites) {
+      dayDot = "green";
+      dayStatus = margGoodSites.join(", ");
+      anyFlyable = true;
+    } else if (hasAmberSites) {
+      dayDot = "amber";
+      dayStatus = amberSites.join(", ");
+      anyFlyable = true;
+    } else {
+      dayDot = "red";
+      dayStatus = "Not Looking Good";
+    }
+
+    // Determine the best status label for the summary — matches forecast card logic
+    let bestStatusLabel = '';
+    let bestStatusColor = '';
+    if (hasGreenSites) {
+      bestStatusLabel = 'On Wind';
+      bestStatusColor = '#4ade80';
+    } else if (hasMargGoodSites) {
+      bestStatusLabel = 'Marginal Good';
+      bestStatusColor = '#5cb85c';
+    } else if (hasAmberSites) {
+      bestStatusLabel = 'Marginal';
+      bestStatusColor = '#fbbf24';
+    }
+
+    if (hasAnySites) {
+      flyableCount++;
+      const sunriseTime = daily.sunrise && daily.sunrise[d] ? new Date(daily.sunrise[d]).toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit"}) : "06:30";
+      const sunsetTime = daily.sunset && daily.sunset[d] ? new Date(daily.sunset[d]).toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit"}) : "19:30";
+      const fullDayName = d === 0 ? "Today" : d === 1 ? "Tomorrow" : dayNames[fDate.getDay()] + " " + fDate.getDate() + " " + monthNames[fDate.getMonth()];
+      flyableDaySummary.push({ label: fullDayName, sunrise: sunriseTime, sunset: sunsetTime, status: bestStatusLabel, statusColor: bestStatusColor });
+    }
+
+    // Abbreviate site names for compact display
+    const shortStatus = dayStatus
+      .replace("Newhaven Cliffs", "Newhaven")
+      .replace("Mt. Caburn", "Caburn")
+      .replace("Swan Borough", "Swan B.")
+      .replace("High & Over", "High&Over")
+      .replace("West Flank", "W.Flank");
+
+    const dotHtml = dayDot === 'red'
+      ? `<span class="flyable-dot flyable-dot-red" style="position:relative;display:inline-flex;align-items:center;justify-content:center;"><span style="font-size:5px;font-weight:900;color:white;line-height:1;">✕</span></span>`
+      : `<span class="flyable-dot flyable-dot-${dayDot}"></span>`;
+
+    flyableHtml += `
+      <div class="flyable-day-row">
+        ${dotHtml}
+        <span class="flyable-day-label">${fDayName}</span>
+        <span class="flyable-day-date">${fDateStr}</span>
+        <span class="flyable-day-sites" title="${dayStatus}">${shortStatus}</span>
+      </div>`;
+  }
+
+  // Add Possible Flyable Days Ahead summary
+  if (flyableCount > 0) {
+    flyableHtml += `<div style="margin-top:6px;padding-top:5px;border-top:1px solid rgba(255,255,255,0.15);">`;
+    flyableHtml += `<div style="font-size:9px;font-weight:700;color:#4ade80;margin-bottom:3px;">\uD83E\uDD14 Possible Flyable Days Ahead: ${flyableCount}</div>`;
+    flyableDaySummary.forEach(fd => {
+      flyableHtml += `<div style="font-size:8px;color:rgba(255,255,255,0.8);line-height:1.4;display:flex;justify-content:space-between;align-items:center;"><span>\uD83E\uDE82 ${fd.label}</span><span style="font-size:7px;font-weight:700;color:${fd.statusColor};">${fd.status}</span></div>`;
+    });
+    flyableHtml += `</div>`;
+  } else {
+    flyableHtml += '<div class="flyable-none-msg">No flyable days in the next 16 days</div>';
+  }
+
+  flyableDaysEl.innerHTML = flyableHtml;
+  flyableDaysEl.style.display = "block";
 
   // 14-day cards
   let cardsHtml = '<div class="forecast-grid">';
 
-  const numDays = Math.min(daily.time.length, 16);
   for (let i = 0; i < numDays; i++) {
     const date = new Date(daily.time[i] + "T12:00:00");
     const dayName = dayNames[date.getDay()];
@@ -694,11 +1133,18 @@ function renderForecast(data) {
     const windDir = daily.wind_direction_10m_dominant[i];
     const windSpdRaw = daily.wind_speed_10m_max[i];
     const gustRaw = daily.wind_gusts_10m_max ? daily.wind_gusts_10m_max[i] : null;
+    const precipSum = daily.precipitation_sum ? daily.precipitation_sum[i] : 0;
+    const precipProb = daily.precipitation_probability_max ? daily.precipitation_probability_max[i] : 0;
+    const dayIsRainy = (precipSum != null && precipSum > 0) || (precipProb != null && precipProb >= 50);
     const hasData = windDir !== null && windSpdRaw !== null;
     const windSpd = hasData ? msToMph(windSpdRaw) : "—";
     const gustSpd = gustRaw !== null ? msToMph(gustRaw) : null;
     const compassLabel = hasData ? degToCompass(windDir) : "—";
     const isExtended = i >= 7;
+
+    // Sunrise/Sunset for this day
+    const cardSunrise = daily.sunrise && daily.sunrise[i] ? new Date(daily.sunrise[i]).toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit"}) : null;
+    const cardSunset = daily.sunset && daily.sunset[i] ? new Date(daily.sunset[i]).toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit"}) : null;
 
     // Wind arrow rotation: arrow points in the direction the wind is coming FROM
     const arrowRotation = hasData ? windDir : 0;
@@ -714,8 +1160,10 @@ function renderForecast(data) {
         </div>`;
         return;
       }
-      const status = getSiteStatus(windDir, site);
-      const statusLabel = status === "green" ? "Flyable" : status === "amber" ? "Marginal" : "Off Wind";
+      const cardSpeedMph = parseFloat(windSpd);
+      const cardGustMph = gustSpd !== null ? parseFloat(gustSpd) : 0;
+      const status = getSiteStatus(windDir, site, cardSpeedMph, dayIsRainy, isExtended, { gustMph: cardGustMph, rainProb: precipProb });
+      const statusLabel = status === "green" ? "On Wind" : status === "marginal-good" ? "Marginal Good" : status === "amber" ? "Marginal" : "Off Wind";
       sitesHtml += `
         <div class="site-row">
           <span class="site-name">${site.name}</span>
@@ -723,7 +1171,7 @@ function renderForecast(data) {
         </div>`;
     });
 
-    const extendedBadge = isExtended ? '<span style="font-size:9px;background:#f0f1f3;color:#8891a0;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px;">EXTENDED</span>' : '';
+    const extendedBadge = isExtended ? '<span style="font-size:6px;background:#f0f1f3;color:#8891a0;padding:1px 3px;border-radius:2px;font-weight:600;margin-left:3px;">EXT</span>' : '';
 
     cardsHtml += `
       <div class="day-card" ${isToday ? 'style="border-color: var(--accent); border-width: 2px;"' : ''} ${!hasData ? 'style="opacity:0.5"' : ''}>
@@ -733,14 +1181,20 @@ function renderForecast(data) {
         </div>
         <div class="day-card-wind">
           <div class="wind-arrow-container" ${!hasData ? 'style="opacity:0.3"' : ''}>
+            <span class="nesw nesw-n">N</span>
+            <span class="nesw nesw-e">E</span>
+            <span class="nesw nesw-s">S</span>
+            <span class="nesw nesw-w">W</span>
             <svg class="wind-arrow" viewBox="0 0 24 24" style="transform: rotate(${arrowRotation}deg);">
               <path d="M12 2 L8 10 L11 9 L11 22 L13 22 L13 9 L16 10 Z" fill="var(--accent)" />
             </svg>
           </div>
           <div class="wind-details">
-            <div class="wind-direction-label">${compassLabel} ${hasData ? `<span style="font-weight:400;font-size:12px;color:var(--text-muted)">(${Math.round(windDir)}°)</span>` : ''}</div>
+            <div class="wind-direction-label">${compassLabel} ${hasData ? `<span style="font-weight:400;font-size:10px;color:var(--text-muted)">(${Math.round(windDir)}°)</span>` : ''}</div>
             <div class="wind-speed">${hasData ? `Max: ${windSpd} mph` : 'No forecast data'}</div>
             ${gustSpd ? `<div class="wind-gust">Gusts: ${gustSpd} mph</div>` : ''}
+            ${hasData && dayIsRainy ? `<div class="wind-gust" style="color:var(--accent);font-weight:600;">\u{1F327}\uFE0F Rain${precipProb ? ` ${precipProb}%` : ''}</div>` : ''}
+            ${cardSunrise && cardSunset ? `<div class="sun-times">\u2600\uFE0F ${cardSunrise} &nbsp; \uD83C\uDF05 ${cardSunset}</div>` : ''}
           </div>
         </div>
         <div class="day-card-sites">${sitesHtml}</div>
@@ -755,7 +1209,7 @@ function renderForecast(data) {
 // FETCH DATA — Open-Meteo UKMO API
 // ==========================================================
 async function fetchForecast() {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=wind_speed_10m_max,wind_direction_10m_dominant,wind_gusts_10m_max,temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&current=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code&wind_speed_unit=ms&timezone=Europe/London&forecast_days=16`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=wind_speed_10m_max,wind_direction_10m_dominant,wind_gusts_10m_max,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,weather_code,sunrise,sunset&current=temperature_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code,precipitation&wind_speed_unit=ms&timezone=Europe/London&forecast_days=16`;
 
   try {
     const resp = await fetch(url);
@@ -766,12 +1220,23 @@ async function fetchForecast() {
     console.error("Fetch error:", err);
     document.getElementById("forecast-container").innerHTML =
       `<div class="error-msg">Failed to fetch weather data: ${err.message}. Please check your internet connection and try again.</div>`;
-    drawCompassRose(null);
+    drawCompassRose(null, null, false);
   }
 }
 
+// Current time clock
+function updateClock() {
+  const el = document.getElementById('current-time');
+  if (el) {
+    const now = new Date();
+    el.textContent = now.toLocaleString('en-GB', { weekday:'long', day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  }
+}
+updateClock();
+setInterval(updateClock, 1000);
+
 // Initial draw and fetch
-drawCompassRose(null);
+drawCompassRose(null, null, false);
 fetchForecast();
 
 // Auto-refresh every 30 minutes
