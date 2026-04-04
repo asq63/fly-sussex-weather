@@ -792,6 +792,8 @@ function drawCompassRose(currentWindDeg, currentWindSpeedMph, isRaining, current
     const speedForStatus = currentWindSpeedMph != null ? currentWindSpeedMph : 0;
     const raining = isRaining || false;
     let status = currentWindDeg !== null ? getSiteStatus(currentWindDeg, site, speedForStatus, raining, false, { gustMph: currentGustMph, rainProb: todayRainProb }) : null;
+    // Check if wind direction is in or near this site's arc
+    const windInOrNear = currentWindDeg !== null && distToArc(currentWindDeg, site.start, site.end) <= 22.5;
     // Outside daylight hours, override green/good/marginal to show black
     const daylight = isDaylight();
     let fill = site.color;
@@ -800,7 +802,7 @@ function drawCompassRose(currentWindDeg, currentWindSpeedMph, isRaining, current
     } else if (status === "green") fill = "var(--green)";
     else if (status === "marginal-good") fill = "#5cb85c";
     else if (status === "amber") fill = "var(--amber)";
-    else if (status === "red") fill = "var(--red)";
+    else if (status === "red" && windInOrNear) fill = "var(--red)";
 
     html += `<path d="${arcPath(cx, cy, r1, r2, site.start, site.end)}" fill="${fill}" stroke="white" stroke-width="1.5" opacity="0.92"/>`;
     // Label — handle multi-word names
