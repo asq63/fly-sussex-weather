@@ -800,7 +800,7 @@ function drawCompassRose(currentWindDeg, currentWindSpeedMph, isRaining, current
     } else if (status === "green") fill = "var(--green)";
     else if (status === "marginal-good") fill = "#5cb85c";
     else if (status === "amber") fill = "var(--amber)";
-    else if (status === "red") fill = "#c9b3b3";
+    else if (status === "red") fill = "var(--red)";
 
     html += `<path d="${arcPath(cx, cy, r1, r2, site.start, site.end)}" fill="${fill}" stroke="white" stroke-width="1.5" opacity="0.92"/>`;
     // Label — handle multi-word names
