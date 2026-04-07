@@ -4,8 +4,8 @@
   "description": "Weather Information for Fly Sussex Sites",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a1628",
-  "theme_color": "#0a1628",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "icon-192.png",
